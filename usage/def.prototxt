@@ -1,0 +1,111 @@
+name: "GoogleNet"
+layer {
+    name: "data_mb"
+    type: "MultibatchData"
+    top: "data_mb"
+    top: "label_type_mb"
+    include {
+        phase: TRAIN
+    }
+    transform_param {
+        mirror: true
+        crop_size: 224
+        mean_value: 104
+        mean_value: 117
+        mean_value: 123
+    }
+    multi_batch_data_param {
+        root_folder: "/home/vis/quzhi/data/4kw_data_coarse_grain/"
+        source: "/home/vis/quzhi/data/labelfile_new/train.txt.exist"
+        #source: "/home/vis/quzhi/data/labelfile_new/val.txt.exist"
+        batch_size: 120
+        shuffle: true
+        new_height: 224
+        new_width: 224
+        identity_num_per_batch: 60
+        img_num_per_identity: 2
+        rand_identity: true
+    }
+}
+
+
+
+layer {
+    name: "data_mb"
+    type: "MultibatchData"
+    top: "data_mb"
+    top: "label_type_mb"
+    include {
+        phase: TEST
+    }
+    transform_param {
+        mirror: true
+        crop_size: 224
+        mean_value: 104
+        mean_value: 117
+        mean_value: 123
+    }
+    multi_batch_data_param {
+        root_folder: "/home/vis/quzhi/data/4kw_data_coarse_grain/"
+        source: "/home/vis/quzhi/data/labelfile_new/val.txt.exist"
+        batch_size: 30
+        shuffle: true
+        new_height: 224
+        new_width: 224
+        identity_num_per_batch: 15
+        img_num_per_identity: 2
+        rand_identity: true
+    }
+}
+
+layer {
+    name: "data_transformer"
+    type: "DataTransformer"
+    bottom: "data_mb"
+    top: "data_mb"
+    include {
+        phase: TRAIN
+    }
+    data_transformer_l_param {
+        delta1_sigma: 0.00000001 #10.5
+        delta2_sigma: 0.00000001 #0.15
+        delta3_sigma: 0.00000001 #1.1 #2.4
+        delta4_sigma: 0.00000001 #1.1 #2.4
+        rotate_angle_scope: 0.349 # 0.698 #40degree 0.349 #20degree
+        translation_w_scope: 70
+        translation_h_scope: 70
+        scale_w_scope: 1.2
+        scale_h_scope: 1.2
+        h_flip: true
+        elastic_transform: false
+        amplitude: 1
+        radius: 1
+    }
+}
+layer {
+  name: "conv1/7x7_s2"
+  type: "Convolution"
+  bottom: "data_mb"
+  top: "conv1/7x7_s2"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 64
+    pad: 3
+    kernel_size: 7
+    stride: 2
+    weight_filler {
+      type: "xavier"
+    }
+    bias_filler {
+      type: "constant"
+      value: 0.2
+    }
+  }
+}

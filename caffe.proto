@@ -1,0 +1,31 @@
+optional DataTranformerLParameter data_transformer_l_param = 8866716;
+message DataTranformerLParameter {
+  //output-canvas size, default is correspond to input size
+  optional int32 canvas_w = 14 [default = -1];
+  optional int32 canvas_h = 15 [default = -1];
+
+  //absolute distortion
+  optional float delta1_sigma = 1 [default = 12.75];
+  //relative distortion
+  optional float delta2_sigma = 2 [default = 0.15];
+  //height-wise distortion
+  optional float delta3_sigma = 3 [default = 0];
+  //width-wise distortion
+  optional float delta4_sigma = 4 [default = 0]; 
+
+
+  optional float rotate_angle_scope = 5 [default = 0.349];//20 degree
+  optional float translation_w_scope = 6 [default = 8];
+  optional float translation_h_scope = 7 [default = 8];
+  optional float scale_w_scope = 8 [default = 1.2];
+  optional float scale_h_scope = 9 [default = 1.2];
+  
+  // do mirror
+  optional bool h_flip = 10 [default = true];
+
+  // elastic transform
+  optional bool elastic_transform = 13 [default = false];
+  optional float amplitude = 11 [default = 1];
+  optional float radius = 12 [default = 1];
+}
+

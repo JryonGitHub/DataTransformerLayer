@@ -1,7 +1,7 @@
 # DataTransformerLayer
 
 CAFFE IMPLEMENTATION OF data augumentation (CUDA version)
-
+Deduction and results are in folder [./attachments]
 proto definition:
 ```
 message DataTranformerLParameter {
